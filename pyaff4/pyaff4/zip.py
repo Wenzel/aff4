@@ -55,7 +55,7 @@ class EndCentralDirectory(struct_parser.CreateStruct(
         uint16_t comment_len = 0;
         """)):
 
-    magic_string = 'PK\x05\x06'
+    magic_string = b'PK\x05\x06'
 
     def IsValid(self):
         return self.magic == 0x6054b50
