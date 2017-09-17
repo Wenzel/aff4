@@ -1,4 +1,5 @@
 from __future__ import print_function
+import six
 # Copyright 2014 Google Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -410,10 +411,15 @@ class MemoryDataStore(object):
             if subject_regex is not None and subject_regex.match(subject):
                 yield subject
 
+    def QueryPredicate(self, predicate):
+        for subject, data in six.iteritems(self.store):
+            for pred, value in six.iteritems(data):
+                if pred == predicate:
+                    yield subject, predicate, value
 
     def QueryPredicateObject(self, predicate, object):
-        for subject, data in self.store.items():
-            for pred, value in data.items():
+        for subject, data in six.iteritems(self.store):
+            for pred, value in six.iteritems(data):
                 if pred == predicate:
                     if type(value) == type([]):
                         if object in value:
@@ -424,7 +430,7 @@ class MemoryDataStore(object):
                         yield subject
 
     def QuerySubjectPredicate(self, subject, predicate):
-        for s, data in self.store.items():
+        for s, data in six.iteritems(self.store):
             if s == subject:
                 for pred, value in data.items():
                     if pred == predicate:
@@ -441,7 +447,7 @@ class MemoryDataStore(object):
                 yield subject
 
     def QueryPredicatesBySubject(self, subject):
-        for pred, value in self.store.get(subject, {}).items():
+        for pred, value in six.items(self.store.get(subject, {})):
             yield pred, value
 
 
